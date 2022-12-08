@@ -1,12 +1,12 @@
-import express from "express";
-import * as dotenv from "dotenv";
-import { connect } from "./config/db.config.js";
-import { userRouter } from "./routes/user.routes.js";
-import { uploadImgRouter } from "./routes/uploadImage.routes.js";
 import cors from "cors";
+import * as dotenv from "dotenv";
+import express from "express";
+import { connectToDB } from "./config/db.config.js";
+import { uploadImgRouter } from "./routes/uploadImage.routes.js";
+import { userRouter } from "./routes/user.routes.js";
 
 dotenv.config();
-connect();
+connectToDB();
 
 const app = express();
 
