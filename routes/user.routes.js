@@ -13,11 +13,11 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   try {
-    const { password } = req.body;
+    const { passwordHash } = req.body;
 
     if (
-      !password ||
-      !password.match(
+      !passwordHash ||
+      !passwordHash.match(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
       )
     ) {
@@ -28,7 +28,7 @@ userRouter.post("/signup", async (req, res) => {
 
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
 
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(passwordHash, salt);
 
     const createdUser = await UserModel.create({
       ...req.body,
@@ -74,14 +74,10 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-// userRouter.get(
-//   "/teste",
-//   isAuth,
-//   attachCurrentUser,
-//   isAdmin,
-//   async (req, res) => {
-//     return res.status(200).json(req.currentUser);
-//   }
-// );
+userRouter.get("/profile", isAuth, attachCurrentUser, (req, res) => {
+  const loggedInUser = req.currentUser;
+
+  return res.status(200).json(loggedInUser);
+});
 
 export { userRouter };
