@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const threadSchema = new Schema({
   title: { type: String, required: true, trim: true },
@@ -12,4 +12,4 @@ const threadSchema = new Schema({
   creator: { type: Types.ObjectId, ref: "User" }
 });
 
-export const UserModel = model("User", threadSchema);
+export const ThreadModel = model("Thread", threadSchema);
