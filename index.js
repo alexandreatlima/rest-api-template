@@ -21,3 +21,5 @@ app.use(`/api/${API_VERSION}/uploadImage`, uploadImgRouter);
 app.listen(Number(process.env.PORT), () => {
   console.log(`Server up and running at port ${process.env.PORT}`);
 });
+
+// teste
