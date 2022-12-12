@@ -80,4 +80,9 @@ userRouter.get("/profile", isAuth, attachCurrentUser, (req, res) => {
   return res.status(200).json(loggedInUser);
 });
 
+
+
+// Como vai funcionar edit de user??
+// Rota de delete user??
+
 export { userRouter };

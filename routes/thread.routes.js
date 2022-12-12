@@ -29,6 +29,12 @@ threadRouter.post("/create", isAuth, attachCurrentUser, async (req, res) => {
             creator: loggedInUser._id
         });
 
+        await UserModel.findOneAndUpdate(
+            { _id: loggedInUser._id },
+            { $push: { threadsCreated: newThread._doc._id} },
+            { runValidators : true }
+        )
+
         return res.status(201).json(newThread);
     }
     catch {
@@ -48,17 +54,53 @@ threadRouter.get("/:threadID", async (req, res) => {
     }
 });
 
-// threadRouter.get("/:userID", async (req, res) => {
-//     try {
-//         const thread = await ThreadModel.findOne({ creator: req.params.userID });
-//         return res.status(200).json(thread);
-//     }
-//     catch {
-//         console.log(err);
-//         return res.status(500).json(err);
-//     }
-// });
+threadRouter.get("/byuser/:userID", async (req, res) => {
+    try {
+        const thread = await ThreadModel.find({ creator: req.params.userID });
+        return res.status(200).json(thread);
+    }
+    catch {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
 
+threadRouter.put("/edit/:threadID", isAuth, attachCurrentUser, async (req, res) => {
+    try {
+        const updatedThread = await ThreadModel.findOneAndUpdate(
+            { _id: req.params.threadID },
+            { ...req.body },
+            { new: true, runValidators: true }
+        )
 
+        return res.status(200).json(updatedThread);
+    }
+    catch {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
+
+threadRouter.delete("/delete/:threadID", isAuth, attachCurrentUser, async (req, res) => {
+    try {
+        const loggedInUser = req.currentUser;
+
+        const deletedThread = await ThreadModel.deleteOne({
+            _id: req.params.threadID,
+          });
+
+        await UserModel.findOneAndUpdate(
+            { _id: loggedInUser._id },
+            { $pull: { threadsCreated: req.params.threadID } },
+            { runValidators: true } 
+        );
+    
+        return res.status(200).json(deletedThread);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).json(err);
+    }
+});
 
 export { threadRouter };
