@@ -13,10 +13,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_VERSION = "1.0";
 
-app.use(`/api/${API_VERSION}/user`, userRouter);
-app.use(`/api/${API_VERSION}/uploadImage`, uploadImgRouter);
+
+app.use(`/api/user`, userRouter);
+app.use(`/api/uploadImage`, uploadImgRouter);
 
 app.listen(Number(process.env.PORT), () => {
   console.log(`Server up and running at port ${process.env.PORT}`);
