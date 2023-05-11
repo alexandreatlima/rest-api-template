@@ -1,11 +1,7 @@
+import bcrypt from "bcrypt";
 import express from "express";
 import { generateToken } from "../config/jwt.config.js";
-import isAuth from "../middlewares/isAuth.js";
-import attachCurrentUser from "../middlewares/attachCurrentUser.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
 import { UserModel } from "../model/user.model.js";
-
-import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 10;
 
